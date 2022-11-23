@@ -1,0 +1,434 @@
+//Import global Rules
+@use './sass/layout/global-rules';
+
+//Import Pages
+@use './sass/pages/contact';
+
+//Import Mixings
+@use './sass/helpers/mixins' as *;
+//Import Functions
+@use './sass/helpers/functions' as *;
+
+//Import Variables
+@use './variables/colors' as *;
+
+// Global Variables
+$alt_color: green;
+$mainPadding: 60px;
+$maincolor: blue;
+$theme: "light";
+
+// controle flow if and else
+body {
+    @if($theme=="light") {
+        background-color: #aaa;
+        color: #555;
+    }
+
+    @else {
+        background-color: #555;
+        color: #aaa;
+    }
+}
+
+$rounded: true;
+
+.box {
+    border-radius: if($rounded, 30px, null);
+    color: $alt_color;
+}
+
+.footer {
+    $alt_color: blue !global;
+    background-color: $alt_color;
+}
+
+.copyright {
+    background-color: $alt_color;
+}
+
+.sidebar {
+    background-color: $main;
+    color: $alt;
+}
+
+// Variables
+$max_mobile: "max-width: 767px";
+
+@media ($max_mobile) {
+    .sidebar {
+        padding: 20px;
+    }
+}
+
+//Nasting  & Parent Element
+.parent {
+    font-size: 15px;
+
+    +.child {
+        color: $alt;
+
+        >.grand-child {
+            background-color: $alt_color;
+        }
+    }
+}
+
+.parent-one,
+.parent-two {
+    color: $alt_color;
+
+    .child {
+        background-color: $main;
+    }
+}
+
+.parent> {
+    .child {
+        background-color: $alt;
+    }
+
+    .test {
+        font-size: 20px;
+    }
+}
+
+.parent {
+    > {
+        .child {
+            background-color: $alt;
+        }
+
+        .test {
+            font-size: 20px;
+        }
+    }
+
+    + {
+        .child {
+            background-color: $alt;
+        }
+
+        .test {
+            font-size: 20px;
+        }
+    }
+
+    .child {
+        background-color: $alt;
+    }
+
+    .test {
+        font-size: 20px;
+    }
+
+}
+
+.parent {
+    &::after {
+        content: " ";
+        background-color: $main;
+    }
+
+    &:hover {
+        color: $alt_color;
+    }
+
+    [dir=rtl] & {
+        direction: rtl;
+    }
+}
+
+.box {
+    background-color: aqua;
+
+    font: {
+        size: 10px;
+        weight: bold;
+    }
+
+    padding: {
+        left: 15px;
+        right: 20px;
+        bottom: 20px;
+        top: 20px;
+    }
+
+    margin: auto {
+        top: 50px;
+        bottom: 50px;
+    }
+
+    border: {
+        width: 10px;
+        style: solid;
+        color: red green blue black
+    }
+}
+
+// .main-container{
+//     padding: $mainPadding ;
+//     color: $maincolor;
+// }
+
+// .article{
+//     @extend .main-container;
+//     font-size: 15px;
+
+// }
+
+//placeHolder
+%main-container {
+    padding: $mainPadding ;
+    color: $maincolor;
+    background-color: #555;
+}
+
+.article {
+    @extend %main-container;
+    font-size: 15px;
+
+}
+
+// Practice On If And Else If And Else
+
+$direction: "top";
+
+.arrow-div {
+    @extend %main-container;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    height: 300px;
+    position: relative;
+    margin: 50px auto;
+
+    &::before {
+        content: "";
+        position: absolute;
+        border: 20px solid transparent;
+
+        @if $direction =="top" {
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-bottom-color: red;
+        }
+
+        @else if $direction =="right" {
+            right: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-left-color: red;
+        }
+
+        @else if $direction =="bottom" {
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-top-color: red;
+        }
+
+        @else if $direction =="left" {
+            left: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-right-color: red;
+        }
+
+        @else {
+            @error "This Direction #{$direction} Is Not Valid";
+        }
+    }
+}
+
+// Interpolation
+
+$company: "falcon";
+$position: "right";
+
+.ad-#{$company}-#{unique-id()} {
+  font-size: 20px;
+  background-image: url("imgs/#{$company}.png");
+  #{$position}: 0;
+}
+.ad-#{unique-id()} {
+  font-weight: bold;
+}
+ // Comments
+
+// This Comment Will Not Show In CSS File
+
+/* This Comment Will Show In CSS File But Not In Compressed Mode */
+
+/*! This Comment Will Show In CSS File And In Compressed Mode */
+
+/// @param {num} 
+/// 
+/// 
+
+// Mixin And Include
+
+
+ul.links {
+    @include list-reset;
+  }
+  
+  .circle-100 {
+    @include circle(100px);
+    background-color: red;
+    color: white;
+  }
+  
+  .circle-200 {
+    @include circle(200px);
+    background-color: red;
+    color: white;
+  }
+  
+  .center-circle {
+    @include circle(400px);
+    @include centering;
+  }
+
+
+ // @for $i from 1 to 5 {// not contain 5
+@for $i from 1 through 5 {// contain 5
+    .calss-#{$i} {
+        font-size: 10px +$i;
+    }
+} 
+
+$dimensions: 0;
+
+@for $i from 1 through 10 {
+  .circle-#{100 + $dimensions} {
+    width: $dimensions + 100px;
+    height: $dimensions + 100px;
+    border-radius: 50%;
+  }
+  $dimensions: $dimensions + 100;
+}
+
+
+// Each + Maps
+
+$themes: red, green, blue, orange;
+
+@each $theme in $themes {
+  .#{$theme}-theme {
+    .product {
+      background-color: white;
+      border-bottom: 2px solid $theme;
+      .title {
+        color: $theme;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+$socials: (
+  "facebook": blue,
+  "youtube": red,
+  "github": black,
+  "twitter": indianred,
+);
+
+@each $name, $color in $socials {
+  .#{$name} {
+    background-color: $color;
+    color: white;
+    &::before {
+      content: $name;
+    }
+  }
+}
+
+$classes: "one" 20px red, "two" 15px green, "three" 22px blue;
+
+@each $class, $font, $color in $classes {
+  .#{$class} {
+    font-size: $font;
+    background-color: $color;
+    color: white;
+    padding: $font / 2;
+  }
+}
+
+// Loop => While
+
+$start: 1;
+
+@while $start <= 10 {
+  .width-#{$start * 100} {
+    width: $start * 100px;
+    height: ($start * 100px) / 2;
+  }
+  $start: $start + 1;
+}
+
+// Create Grid System
+
+$grid_cols: 12;
+
+@for $i from 1 through $grid_cols {
+  .col-#{$i} {
+    width: percentage($i / $grid_cols);
+  }
+}
+
+
+// Function
+
+$width: 200px;
+
+.element {
+  width: $width;
+  height: half($width);
+  top: calculate(100px, 200px, 50px);
+
+}
+
+// Mixin With Content
+
+.black-overlay {
+    @include overlay(black, 0.5);
+  }
+  
+  @include keyF(fade-in) {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @include keyF(go-up) {
+    from {
+      bottom: 0;
+    }
+    to {
+      bottom: 100px;
+    }
+  }
+
+
+  // If Condition + Mixin + Content
+
+.media {
+    @include breakpoints(mobile) {
+      font-size: 15px;
+    }
+    @include breakpoints(small) {
+      font-size: 18px;
+    }
+    @include breakpoints(medium) {
+      font-size: 20px;
+    }
+    @include breakpoints(large) {
+      font-size: 22px;
+    }
+  }
